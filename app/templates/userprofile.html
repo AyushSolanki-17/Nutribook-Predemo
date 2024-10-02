@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold text-gray-800 mb-6 mt-6 m-6">User Profile</h2>
+
+<form id="profile-form" class="space-y-6 max-w-lg m-6">
+    <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+        <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value="">
+    </div>
+
+    <div>
+        <label for="bio" class="block text-sm font-medium text-gray-700">Bio:</label>
+        <textarea id="bio" name="bio" rows="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+    </div>
+
+    <div>
+        <button type="button" onclick="saveProfile()" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Save
+        </button>
+    </div>
+</form>
+
+{% endblock %}
+{% block script %}
+    <script>
+        // Fetch the existing profile data on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/profile')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("name").value = data.name;
+                    document.getElementById("bio").value = data.bio;
+                });
+        });
+
+        // Save the profile data
+        function saveProfile() {
+            const name = document.getElementById("name").value;
+            const bio = document.getElementById("bio").value;
+
+            fetch('/profile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, bio: bio })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            });
+        }
+    </script>
+{% endblock %}

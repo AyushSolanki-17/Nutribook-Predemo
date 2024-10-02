@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/off
+      - GEMINI_API_KEY=<YOUR GEMINI KEY HERE>
+    volumes:
+      - ./app:/app
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - /Users/ayushsolanki/Desktop/ConsumeWise/mongo_data:/data/db
+      - /Users/ayushsolanki/Desktop/ConsumeWise/data_dump:/datadump
+
+volumes:
+  mongo_data:
